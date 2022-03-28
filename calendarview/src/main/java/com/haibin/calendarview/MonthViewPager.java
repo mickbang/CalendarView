@@ -172,7 +172,11 @@ public final class MonthViewPager extends ViewPager {
                     view.invalidate();
                 }
                 mWeekPager.updateSelected(mDelegate.mIndexCalendar, false);
+                //这里重新计算了高度，但是高度没有应用到当前布局，所以造成mode为mode_only_current无法完全展示
                 updateMonthViewHeight(calendar.getYear(), calendar.getMonth());
+                ViewGroup.LayoutParams params = getLayoutParams();
+                params.height = mCurrentViewHeight;
+                setLayoutParams(params);
                 isUsingScrollToCalendar = false;
             }
 
