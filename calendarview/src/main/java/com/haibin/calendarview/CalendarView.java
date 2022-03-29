@@ -1635,7 +1635,7 @@ public class CalendarView extends FrameLayout {
         if (mDelegate == null || mMonthPager == null || mWeekPager == null) {
             return;
         }
-        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        java.util.Calendar calendar = CalendarUtil.getCalendar();
         int day = calendar.get(java.util.Calendar.DAY_OF_MONTH);
         if (getCurDay() == day) {
             return;

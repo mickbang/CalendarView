@@ -294,7 +294,7 @@ public final class LunarCalendar {
      */
     private static String[] getSpecialFestivals(int year) {
         String[] festivals = new String[3];
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = CalendarUtil.getCalendar();
         date.set(year, 4, 1);
         int week = date.get(java.util.Calendar.DAY_OF_WEEK);
         int startDiff = 7 - week + 1;

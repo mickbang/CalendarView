@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.haibin.calendarview.Calendar;
+import com.haibin.calendarview.CalendarUtil;
 import com.haibin.calendarview.CalendarView;
 import com.haibin.calendarviewproject.R;
 import com.haibin.calendarviewproject.base.activity.BaseActivity;
@@ -203,7 +204,7 @@ public class RangeActivity extends BaseActivity implements
 
 
     private long getCurrentDayMill(){
-        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        java.util.Calendar calendar = CalendarUtil.getCalendar();
         calendar.set(java.util.Calendar.HOUR,0);
         calendar.set(java.util.Calendar.MINUTE,0);
         calendar.set(java.util.Calendar.MILLISECOND,0);

@@ -1155,7 +1155,7 @@ final class CalendarViewDelegate {
             return calendars;
         }
         final long ONE_DAY = 1000 * 3600 * 24;
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = CalendarUtil.getCalendar();
 
         date.set(mSelectedStartRangeCalendar.getYear(),
                 mSelectedStartRangeCalendar.getMonth() - 1,

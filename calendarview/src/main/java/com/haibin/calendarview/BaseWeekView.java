@@ -125,7 +125,7 @@ public abstract class BaseWeekView extends BaseView {
      * @return 是否是最小访问边界了
      */
     final boolean isMinRangeEdge(Calendar calendar) {
-        java.util.Calendar c = java.util.Calendar.getInstance();
+        java.util.Calendar c = CalendarUtil.getCalendar();
         c.set(mDelegate.getMinYear(), mDelegate.getMinYearMonth() - 1, mDelegate.getMinYearDay());
         long minTime = c.getTimeInMillis();
         c.set(calendar.getYear(), calendar.getMonth() - 1, calendar.getDay());

@@ -359,7 +359,7 @@ public final class Calendar implements Serializable, Comparable<Calendar> {
      * @return getTimeInMillis
      */
     public long getTimeInMillis() {
-        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        java.util.Calendar calendar = CalendarUtil.getCalendar();
         calendar.set(java.util.Calendar.YEAR, year);
         calendar.set(java.util.Calendar.MONTH, month - 1);
         calendar.set(java.util.Calendar.DAY_OF_MONTH, day);

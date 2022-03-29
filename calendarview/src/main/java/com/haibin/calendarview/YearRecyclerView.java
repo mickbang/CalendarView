@@ -77,7 +77,7 @@ public final class YearRecyclerView extends RecyclerView {
      * @param year year
      */
     final void init(int year) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = CalendarUtil.getCalendar();
         for (int i = 1; i <= 12; i++) {
             date.set(year, i - 1, 1);
             int mDaysCount = CalendarUtil.getMonthDaysCount(year, i);

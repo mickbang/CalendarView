@@ -18,10 +18,13 @@ package com.haibin.calendarview;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * 一些日期辅助计算工具
@@ -30,10 +33,11 @@ import java.util.List;
 public final class CalendarUtil {
 
     private static final long ONE_DAY = 1000 * 3600 * 24;
-
+    private static TimeZone timezone = TimeZone.getDefault();
     @SuppressLint("SimpleDateFormat")
     static int getDate(String formatStr, Date date) {
         SimpleDateFormat format = new SimpleDateFormat(formatStr);
+        format.setTimeZone(timezone);
         return Integer.parseInt(format.format(date));
     }
 
@@ -112,7 +116,7 @@ public final class CalendarUtil {
      * @return 不需要多余行的高度
      */
     public static int getMonthViewHeight(int year, int month, int itemHeight, int weekStartWith) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
         date.set(year, month - 1, 1, 12, 0, 0);
         int preDiff = getMonthViewStartDiff(year, month, weekStartWith);
         int monthDaysCount = getMonthDaysCount(year, month);
@@ -147,7 +151,7 @@ public final class CalendarUtil {
      * @return 获取某天在该月的第几周 the week line in MonthView
      */
     public static int getWeekFromDayInMonth(Calendar calendar, int weekStart) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
         date.set(calendar.getYear(), calendar.getMonth() - 1, 1, 12, 0, 0);
         //该月第一天为星期几,星期天 == 0
         int diff = getMonthViewStartDiff(calendar, weekStart);
@@ -161,7 +165,7 @@ public final class CalendarUtil {
      * @return 获取上一个日子
      */
     public static Calendar getPreCalendar(Calendar calendar) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
 
         date.set(calendar.getYear(), calendar.getMonth() - 1, calendar.getDay(), 12, 0, 0);//
 
@@ -178,7 +182,7 @@ public final class CalendarUtil {
     }
 
     public static Calendar getNextCalendar(Calendar calendar) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
 
         date.set(calendar.getYear(), calendar.getMonth() - 1, calendar.getDay(), 12, 0, 0);//
 
@@ -204,7 +208,7 @@ public final class CalendarUtil {
      * @return 获取日期所在月视图对应的起始偏移量 the start diff with MonthView
      */
     static int getMonthViewStartDiff(Calendar calendar, int weekStart) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
         date.set(calendar.getYear(), calendar.getMonth() - 1, 1, 12, 0, 0);
         int week = date.get(java.util.Calendar.DAY_OF_WEEK);
         if (weekStart == CalendarViewDelegate.WEEK_START_WITH_SUN) {
@@ -228,7 +232,7 @@ public final class CalendarUtil {
      * @return 获取日期所在月视图对应的起始偏移量 the start diff with MonthView
      */
     static int getMonthViewStartDiff(int year, int month, int weekStart) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
         date.set(year, month - 1, 1, 12, 0, 0);
         int week = date.get(java.util.Calendar.DAY_OF_WEEK);
         if (weekStart == CalendarViewDelegate.WEEK_START_WITH_SUN) {
@@ -267,7 +271,7 @@ public final class CalendarUtil {
      * @return 获取日期月份对应的结束偏移量 the end diff in Month not MonthView
      */
     private static int getMonthEndDiff(int year, int month, int day, int weekStart) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
         date.set(year, month - 1, day);
         int week = date.get(java.util.Calendar.DAY_OF_WEEK);
         if (weekStart == CalendarViewDelegate.WEEK_START_WITH_SUN) {
@@ -287,7 +291,7 @@ public final class CalendarUtil {
      * @return 返回某个日期是星期几
      */
     static int getWeekFormCalendar(Calendar calendar) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
         date.set(calendar.getYear(), calendar.getMonth() - 1, calendar.getDay());
         return date.get(java.util.Calendar.DAY_OF_WEEK) - 1;
     }
@@ -321,7 +325,7 @@ public final class CalendarUtil {
     static boolean isCalendarInRange(Calendar calendar,
                                      int minYear, int minYearMonth, int minYearDay,
                                      int maxYear, int maxYearMonth, int maxYearDay) {
-        java.util.Calendar c = java.util.Calendar.getInstance();
+        java.util.Calendar c = getCalendar();
         c.set(minYear, minYearMonth - 1, minYearDay);
         long minTime = c.getTimeInMillis();
         c.set(maxYear, maxYearMonth - 1, maxYearDay);
@@ -348,7 +352,7 @@ public final class CalendarUtil {
     public static int getWeekCountBetweenBothCalendar(int minYear, int minYearMonth, int minYearDay,
                                                       int maxYear, int maxYearMonth, int maxYearDay,
                                                       int weekStart) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
         date.set(minYear, minYearMonth - 1, minYearDay);
         long minTimeMills = date.getTimeInMillis();//给定时间戳
         int preDiff = getWeekViewStartDiff(minYear, minYearMonth, minYearDay, weekStart);
@@ -382,7 +386,7 @@ public final class CalendarUtil {
     public static int getWeekFromCalendarStartWithMinCalendar(Calendar calendar,
                                                               int minYear, int minYearMonth, int minYearDay,
                                                               int weekStart) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
         date.set(minYear, minYearMonth - 1, minYearDay);//起始日期
         long firstTimeMill = date.getTimeInMillis();//获得范围起始时间戳
 
@@ -419,7 +423,7 @@ public final class CalendarUtil {
      * @return 该星期的第一天日期
      */
     public static Calendar getFirstCalendarStartWithMinCalendar(int minYear, int minYearMonth, int minYearDay, int week, int weekStart) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
 
         date.set(minYear, minYearMonth - 1, minYearDay, 12, 0);//
 
@@ -493,7 +497,7 @@ public final class CalendarUtil {
         if (calendar2 == null) {
             return Integer.MAX_VALUE;
         }
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
 
         date.set(calendar1.getYear(), calendar1.getMonth() - 1, calendar1.getDay(), 12, 0, 0);//
 
@@ -541,7 +545,7 @@ public final class CalendarUtil {
      * @return 为月视图初始化日历项
      */
     static List<Calendar> initCalendarForMonthView(int year, int month, Calendar currentDate, int weekStar) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
 
         date.set(year, month - 1, 1);
 
@@ -606,7 +610,7 @@ public final class CalendarUtil {
     static List<Calendar> getWeekCalendars(Calendar calendar, CalendarViewDelegate mDelegate) {
         long curTime = calendar.getTimeInMillis();
 
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
         date.set(calendar.getYear(),
                 calendar.getMonth() - 1,
                 calendar.getDay(), 12, 0);//
@@ -621,7 +625,7 @@ public final class CalendarUtil {
         }
 
         curTime -= startDiff * ONE_DAY;
-        java.util.Calendar minCalendar = java.util.Calendar.getInstance();
+        java.util.Calendar minCalendar = getCalendar();
         minCalendar.setTimeInMillis(curTime);
         Calendar startCalendar = new Calendar();
         startCalendar.setYear(minCalendar.get(java.util.Calendar.YEAR));
@@ -641,7 +645,7 @@ public final class CalendarUtil {
     @SuppressWarnings("unused")
     static List<Calendar> initCalendarForWeekView(Calendar calendar, CalendarViewDelegate mDelegate, int weekStart) {
 
-        java.util.Calendar date = java.util.Calendar.getInstance();//当天时间
+        java.util.Calendar date = getCalendar();//当天时间
         date.set(calendar.getYear(), calendar.getMonth() - 1, calendar.getDay(), 12, 0);
         long curDateMills = date.getTimeInMillis();//生成选择的日期时间戳
 
@@ -690,7 +694,7 @@ public final class CalendarUtil {
      * @return 获取周视图起始偏移量，用来生成周视图布局
      */
     private static int getWeekViewStartDiff(int year, int month, int day, int weekStart) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
         date.set(year, month - 1, day, 12, 0);//
         int week = date.get(java.util.Calendar.DAY_OF_WEEK);
         if (weekStart == 1) {
@@ -716,7 +720,7 @@ public final class CalendarUtil {
      * @return 获取周视图结束偏移量，用来生成周视图布局
      */
     public static int getWeekViewEndDiff(int year, int month, int day, int weekStart) {
-        java.util.Calendar date = java.util.Calendar.getInstance();
+        java.util.Calendar date = getCalendar();
         date.set(year, month - 1, day, 12, 0);
         int week = date.get(java.util.Calendar.DAY_OF_WEEK);
         if (weekStart == 1) {
@@ -793,7 +797,7 @@ public final class CalendarUtil {
      * @return 是否是最小访问边界了
      */
     private static boolean isMinRangeEdge(Calendar calendar, CalendarViewDelegate delegate) {
-        java.util.Calendar c = java.util.Calendar.getInstance();
+        java.util.Calendar c = getCalendar();
         c.set(delegate.getMinYear(), delegate.getMinYearMonth() - 1, delegate.getMinYearDay(), 12, 0);
         long minTime = c.getTimeInMillis();
         c.set(calendar.getYear(), calendar.getMonth() - 1, calendar.getDay(), 12, 0);
@@ -811,5 +815,13 @@ public final class CalendarUtil {
     static int dipToPx(Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+
+    public static void setTimezone(@NonNull TimeZone timezone){
+        CalendarUtil.timezone = timezone;
+    }
+
+    public static java.util.Calendar getCalendar(){
+        return java.util.Calendar.getInstance(timezone);
     }
 }
